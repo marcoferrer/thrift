@@ -263,6 +263,10 @@ func (p *TSimpleServer) processRequests(client TTransport) (err error) {
 	if err != nil {
 		return err
 	}
+	if inputTransport != nil {
+		defer inputTransport.Close()
+	}
+	
 	inputProtocol := p.inputProtocolFactory.GetProtocol(inputTransport)
 	var outputTransport TTransport
 	var outputProtocol TProtocol
@@ -282,9 +286,6 @@ func (p *TSimpleServer) processRequests(client TTransport) (err error) {
 		outputProtocol = p.outputProtocolFactory.GetProtocol(outputTransport)
 	}
 
-	if inputTransport != nil {
-		defer inputTransport.Close()
-	}
 	if outputTransport != nil {
 		defer outputTransport.Close()
 	}
